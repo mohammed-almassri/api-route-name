@@ -2,7 +2,7 @@
     "name": "api-route-name",
     "version": "1.0.0",
     "description": "simple routes",
-    "main": "index.js",
+    "main": "dist/index.js",
     "scripts": {
         "build": "babel src/ -d dist/",
         "test": "node ./dist/test"
