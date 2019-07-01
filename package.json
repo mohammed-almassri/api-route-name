@@ -1,8 +1,9 @@
 {
     "name": "api-route-name",
     "version": "1.0.0",
-    "description": "simple routes",
+    "description": "give names to your api endpoints and easily get their url.",
     "main": "dist/index.js",
+    "repository": "github:mohammed-almassri/api-route-name",
     "scripts": {
         "build": "babel src/ -d dist/",
         "test": "node ./dist/test"
