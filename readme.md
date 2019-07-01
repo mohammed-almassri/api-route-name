@@ -17,16 +17,18 @@ or
 <br>
 `import routeNames from 'api-route-name`
 
-declare an object or array of routes as so:
+declare an array of routes as so:
 
 ```javascript
 const routes = [
+    {
 	prefix:"/api/v1",
     routes:[
     	signup:"signup",
         login:"login",
         user:'user/:id'
     ]
+    }
 ]
 ```
 

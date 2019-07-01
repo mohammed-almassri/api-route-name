@@ -6,7 +6,7 @@
     "repository": "github:mohammed-almassri/api-route-name",
     "scripts": {
         "build": "babel src/ -d dist/",
-        "test": "node ./dist/test"
+        "test": "mocha || true"
     },
     "keywords": [
         "routing",
@@ -22,6 +22,8 @@
         "@babel/cli": "^7.4.4",
         "@babel/core": "^7.4.5",
         "@babel/preset-env": "^7.4.5",
+        "chai": "^4.2.0",
+        "mocha": "^6.1.4",
         "nodemod": "^1.5.19"
     }
 }
