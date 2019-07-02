@@ -76,28 +76,6 @@ will have the name `name1.name2.name3.routeName` and an endpoint of `prefix1/pre
 the name is taken from the attribute name. you can specify a name explicitly but then you also have to specify an endpoint.
 `routeName:{name:"routeName2",endpoint:"routeURL2"}`
 
-In case you have multiple routes with the same endpoint (such as the same url but with different http methods) you **have** to specify a name. for example a CRUD application
-
-```javascript
-routes: {
-    create: "create",
-    retrieve: {
-        endpoint: ":id",
-        name: "retrieve"
-    },
-    update: {
-        endpoint: ":id",
-        name: "update"
-    },
-    delete: {
-        endpoint: ":id",
-        name: "delete"
-    },
-}
-prefix: "posts",
-name: "posts"
-```
-
 ## Arguments
 
 api-route-name uses the [url-pattern](https://www.npmjs.com/package/url-pattern) library for it's pattern matching so consider reading it's docs.

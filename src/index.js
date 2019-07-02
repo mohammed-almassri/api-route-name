@@ -8,7 +8,7 @@ export default function routeName(
     newName = ""
 ) {
     //for every route in this object
-    for (let route of Object.values(routes)) {
+    for (let [prop,route] of Object.entries(routes)) {
         //continue building the name of this route
         let _newName = newName;
         //if this route has more nested routes
@@ -37,10 +37,7 @@ export default function routeName(
                 namePostfix= route.name;
                 pathPostfix= route.endpoint;
             } else {
-                for (let property of Object.keys(routes)) {
-                    if (routes[property] === route)
-                    namePostfix=property
-                }
+                namePostfix=prop
                 pathPostfix=route
             }
             _newName =

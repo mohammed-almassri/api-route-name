@@ -24,15 +24,8 @@ const routes = [{
                     name:"get",
                     endpoint:":id"
                },
-                update:{
-                    name:"update",
-                    endpoint:":id"
-                },
-                delete:{
-                name:"delete",
-                endpoint:":id"
-                },
-            
+                update:":id",
+                delete:":id"
            }
        },
        {
@@ -66,5 +59,9 @@ describe('Router',()=>{
     })
     it('should not return the attribute name when a name attribute is specified',()=>{
         assert.notEqual(route(routes,'posts.retrieve',{id:1}),'/api/v1/posts/1');
+    })
+    it('should correctly evaluate the names of different routes with the same endpoint',()=>{
+        assert.equal(route(routes,'posts.update',{id:1}),'/api/v1/posts/1');
+        assert.equal(route(routes,'posts.delete',{id:1}),'/api/v1/posts/1');
     })
 })
