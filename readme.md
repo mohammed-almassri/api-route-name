@@ -11,7 +11,7 @@ give names to your api endpoints and easily get their url.
 
 import the function:
 
-`var routeNames = require('api-route-name');`
+`var routeNames = require('api-route-name').default;`
 <br>
 or 
 <br>
@@ -20,16 +20,14 @@ or
 declare an array of routes as so:
 
 ```javascript
-const routes = [
-    {
-	prefix:"/api/v1",
-    routes:[
-    	signup:"signup",
-        login:"login",
-        user:'user/:id'
+const routes = [{
+    prefix: "/api/v1",
+    routes: [
+        signup: "signup",
+        login: "login",
+        user: 'user/:id'
     ]
-    }
-]
+}]
 ```
 
 the `routeNames` function takes three arguments:
@@ -57,23 +55,19 @@ a route in a route object like
 
 ```javascript
 {
-prefix:"prefix1",
-name:"name1"
-routes:[
-	{
-    prefix:"prefix2",
-    name:"name2"
-    routes:[
-        {
-          prefix:"prefix3",
-          name:"name3"
-          routes:{
-          	routeName:"routeURL"
-          }
-        }
-    ]
-    }
-]
+    prefix: "prefix1",
+    name: "name1"
+    routes: [{
+        prefix: "prefix2",
+        name: "name2"
+        routes: [{
+            prefix: "prefix3",
+            name: "name3"
+            routes: {
+                routeName: "routeURL"
+            }
+        }]
+    }]
 }
 ```
 
@@ -87,17 +81,26 @@ In case you have multiple routes with the same endpoint (such as the same url bu
 ```javascript
 routes: {
     create: "create",
-    retrieve: { endpoint: ":id", name: "retrieve" },
-    update: { endpoint: ":id", name: "update" },
-    delete: { endpoint: ":id", name: "delete" },
+    retrieve: {
+        endpoint: ":id",
+        name: "retrieve"
+    },
+    update: {
+        endpoint: ":id",
+        name: "update"
+    },
+    delete: {
+        endpoint: ":id",
+        name: "delete"
+    },
 }
-prefix:"posts",
-name:"posts"
+prefix: "posts",
+name: "posts"
 ```
 
 ## Arguments
 
-api-route-name uses the [url-pattren](https://www.npmjs.com/package/url-pattern) library for it's pattern matching so consider reading it's docs.
+api-route-name uses the [url-pattern](https://www.npmjs.com/package/url-pattern) library for it's pattern matching so consider reading it's docs.
 
 you can add arguments to your urls by adding a colon ":" before the argument name. for example you want to get the posts for a specific user you would do the following:
 
@@ -117,26 +120,23 @@ const posts = routeNames(routes, "userPost", { id: 21 });
 
 you can add multiple arguments `blogsByDate : "users/:name/blogposts/:date"`
 
-and get the url with `routeNames(routes,'blogsByDate',{name:"John Doe",date"2019-1-2"})`
+and get the url with `routeNames(routes,'blogsByDate',{name:"John Doe",date:"2019-1-2"})`
 
 ## Recommended Usage
 I recommend putting your routes in a separate module, creating a function that returns the value
 from calling `routeNames` with your `routes` object and exporting that function as default. 
 
 ```javascript
-
 //filename: api-routes.js
-
 import routeNames from 'api-route-name';
 
-const routes={
+const routes = {
     //specify your routes here
 }
 
-export default function route(name,args){
-    return routeNames(routes,name,args)
+export default function route(name, args = {}) {
+    return routeNames(routes, name, args)
 }
-
 ```
 
 now you can easily call `route(name,args)` from anywhere in your app while only writing your routes once.
