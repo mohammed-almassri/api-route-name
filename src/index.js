@@ -44,7 +44,7 @@ export default function routeName(
                 (newName === "" ? "" : newName + ".") + namePostfix;
             //if the newName we constructed matches the name provided by the user
             if (_newName === name) {
-                return new UrlPattern(prefix+"/" + pathPostfix).stringify(args);
+                return new UrlPattern(prefix+(pathPostfix===""?"":("/" + pathPostfix))).stringify(args);
             }
         }
     }
