@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-const ApiRouteName = require('../dist/index');
+const ApiRouteName = require('../dist/index').default;
 const routes = [{
     prefix : 'api/v1',
     routes:[

@@ -9,14 +9,6 @@ give names to your api endpoints and easily get their url.
 
 ## Usage
 
-import the function:
-
-`var routeNames = require('api-route-name').default;`
-<br>
-or 
-<br>
-`import routeNames from 'api-route-name`
-
 declare an array of routes as so:
 
 ```javascript
@@ -30,17 +22,25 @@ const routes = [{
 }]
 ```
 
-the `routeNames` function takes three arguments:
+import the class:
 
--   `routes` the routes array we declared
--   `name` the name of the route we want to get the url of
--   `args (optional)` any arguments to pass to the url such as the id of the users
+`const ApiRouteName = require('api-route-name').default;`
+<br>
+or 
+<br>
+`import ApiRouteName from 'api-route-name`
+
+initialize an `ApiRouteName` object with the route array you declared.
+
+`const route = new ApiRouteName(routes)`
+
+get your urls with the `get` method
 
 ```javascript
-const signup = routeNames(routes, "signup");
-//returns String /api/v1/signup
-const user = routeNames(routes, "user", { id: 10 });
-//returns String /api/v1/user/10
+const signup = route.get("signup");
+//signup = "/api/v1/signup"
+const user = route.get( "user", { id: 10 });
+//user =  "/api/v1/user/10"
 ```
 
 ## Urls and Names
@@ -92,8 +92,8 @@ userPosts:"users/:id/posts"
 then to retrieve the posts for user with id 21 you pass an object with attributes matching your arguments.
 
 ```javascript
-const posts = routeNames(routes, "userPost", { id: 21 });
-//returns {prefix you specified}/user/21/posts
+const posts = route.get("userPost", { id: 21 });
+//posts =  "{prefix you specified}/user/21/posts"
 ```
 
 you can add multiple arguments `blogsByDate : "users/:name/blogposts/:date"`
@@ -106,15 +106,17 @@ from calling `routeNames` with your `routes` object and exporting that function 
 
 ```javascript
 //filename: api-routes.js
-import routeNames from 'api-route-name';
+import ApiRouteName from 'api-route-name';
 
 const routes = {
     //specify your routes here
 }
 
-export default function route(name, args = {}) {
-    return routeNames(routes, name, args)
-}
+export default new ApiRouteName(routes);
 ```
-
-now you can easily call `route(name,args)` from anywhere in your app while only writing your routes once.
+then use it in anywhere in your app
+```javascript
+//other file
+import route from './api-routes';
+route.get('posts.create'),
+```
