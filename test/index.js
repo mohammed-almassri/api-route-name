@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-const route = require('../dist/index').default;
+const ApiRouteName = require('../dist/index');
 const routes = [{
     prefix : 'api/v1',
     routes:[
@@ -38,6 +38,7 @@ const routes = [{
     ]
 }]
 
+const router = new ApiRouteName(routes);
 describe('Routes', () => {
     it('should be an array',()=>{
         assert.typeOf(routes,'array')
@@ -46,22 +47,22 @@ describe('Routes', () => {
 
 describe('Router',()=>{
     it('should return a string for a defined name',()=>{
-        assert.typeOf(route(routes,'accounts.signup'),'string');
+        assert.typeOf(router.get('accounts.signup'),'string');
     })
     it('should return undefined for an undefined name',()=>{
-        assert.typeOf(route(routes,'accounts.notSignup'),'undefined');
+        assert.typeOf(router.get('accounts.notSignup'),'undefined');
     })
     it('should add the arguments to their correct place in the url',()=>{
-        assert.equal(route(routes,'posts.update',{id:1}),'/api/v1/posts/1');
+        assert.equal(router.get('posts.update',{id:1}),'/api/v1/posts/1');
     })
     it('should return the specified name when a name attribute is specified',()=>{
-        assert.equal(route(routes,'posts.get',{id:1}),'/api/v1/posts/1');
+        assert.equal(router.get('posts.get',{id:1}),'/api/v1/posts/1');
     })
     it('should not return the attribute name when a name attribute is specified',()=>{
-        assert.notEqual(route(routes,'posts.retrieve',{id:1}),'/api/v1/posts/1');
+        assert.notEqual(router.get('posts.retrieve',{id:1}),'/api/v1/posts/1');
     })
     it('should correctly evaluate the names of different routes with the same endpoint',()=>{
-        assert.equal(route(routes,'posts.update',{id:1}),'/api/v1/posts/1');
-        assert.equal(route(routes,'posts.delete',{id:1}),'/api/v1/posts/1');
+        assert.equal(router.get('posts.update',{id:1}),'/api/v1/posts/1');
+        assert.equal(router.get('posts.delete',{id:1}),'/api/v1/posts/1');
     })
 })
