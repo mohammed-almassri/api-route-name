@@ -56,7 +56,7 @@ function () {
           } //continue recursively searching for the matching route name in the nested routes
 
 
-          this._initRoutePatterns(route.routes, args, prefix + "/" + route.prefix, _newName, retObj); //if this object has no nested routes we need to return the url with the provided arguments
+          this._initRoutePatterns(route.routes, args, prefix + (route.prefix === "" ? "" : "/" + route.prefix), _newName, retObj); //if this object has no nested routes we need to return the url with the provided arguments
 
         } else {
           //if our route has a name attribute then use it otherwise use the property name
@@ -85,11 +85,6 @@ function () {
       var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       if (this.patterns[name]) return this.patterns[name].stringify(args);
       return undefined;
-    }
-  }, {
-    key: "getPatterns",
-    value: function getPatterns() {
-      return this.patterns;
     }
   }]);
 

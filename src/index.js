@@ -27,7 +27,7 @@ export default class ApiRouteName{
                 this._initRoutePatterns(
                     route.routes,
                     args,
-                    prefix + "/" + route.prefix,
+                    prefix+ (route.prefix===""?"":("/" + route.prefix)),
                     _newName,
                     retObj
                 );

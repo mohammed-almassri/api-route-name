@@ -4,7 +4,7 @@ const routes = [{
     prefix : 'api/v1',
     routes:[
         {
-            prefix:"accounts",
+            prefix:"",
             name:"accounts",
             routes:{
                 signup:"signup",
@@ -64,5 +64,11 @@ describe('Router',()=>{
     it('should correctly evaluate the names of different routes with the same endpoint',()=>{
         assert.equal(router.get('posts.update',{id:1}),'/api/v1/posts/1');
         assert.equal(router.get('posts.delete',{id:1}),'/api/v1/posts/1');
+    })
+    it('should ignore slashes for namespaces with empty prefixes',()=>{
+        assert.equal(router.get('accounts.signup'),'/api/v1/signup');
+    })
+    it('should ignore slashes for empty endpoints',()=>{
+        assert.equal(router.get('posts.index'),'/api/v1/posts');
     })
 })
