@@ -2,6 +2,9 @@
 
 give names to your api endpoints and easily get their url.
 
+## Installation
+`npm install api-route-name`
+
 ## Benefits 
 * not having to remember the full path to your api endpoints
 * easily modify the url/arguments without changing a lot of code
