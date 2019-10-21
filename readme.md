@@ -3,12 +3,14 @@
 give names to your api endpoints and easily get their url.
 
 ## Installation
+
 `npm install api-route-name`
 
-## Benefits 
-* not having to remember the full path to your api endpoints
-* easily modify the url/arguments without changing a lot of code
-* readability/data independence: your routes will be defined in their own file not in ajax calls
+## Benefits
+
+- not having to remember the full path to your api endpoints
+- easily modify the url/arguments without changing a lot of code
+- readability/data independence: your routes will be defined in their own file not in ajax calls
 
 ## Usage
 
@@ -29,7 +31,7 @@ import the class:
 
 `const ApiRouteName = require('api-route-name').default;`
 <br>
-or 
+or
 <br>
 `import ApiRouteName from 'api-route-name`
 
@@ -42,7 +44,7 @@ get your urls with the `get` method
 ```javascript
 const signup = route.get("signup");
 //signup = "/api/v1/signup"
-const user = route.get( "user", { id: 10 });
+const user = route.get("user", { id: 10 });
 //user =  "/api/v1/user/10"
 ```
 
@@ -57,7 +59,7 @@ if it does not have nested routes the route names will be taken from the attribu
 a route in a route object like
 
 ```javascript
-{
+[{
     prefix: "prefix1",
     name: "name1"
     routes: [{
@@ -71,13 +73,13 @@ a route in a route object like
             }
         }]
     }]
-}
+}]
 ```
 
 will have the name `name1.name2.name3.routeName` and an endpoint of `prefix1/prefix2/prefix3/routeURL`
 
 the name is taken from the attribute name. you can specify a name explicitly but then you also have to specify an endpoint.
-`routeName:{name:"routeName2",endpoint:"routeURL2"}`
+`routeName:{name:"routeName2",endpoint:"endpoint2"}`
 
 ## Arguments
 
@@ -104,20 +106,25 @@ you can add multiple arguments `blogsByDate : "users/:name/blogposts/:date"`
 and get the url with `routeNames(routes,'blogsByDate',{name:"John Doe",date:"2019-1-2"})`
 
 ## Recommended Usage
+
 I recommend putting your routes in a separate module, creating a function that returns the value
-from calling `routeNames` with your `routes` object and exporting that function as default. 
+from calling `routeNames` with your `routes` object and exporting that function as default.
 
 ```javascript
 //filename: api-routes.js
-import ApiRouteName from 'api-route-name';
+import ApiRouteName from "api-route-name";
 
-const routes = {
+const routes = [
+  {
     //specify your routes here
-}
+  }
+];
 
 export default new ApiRouteName(routes);
 ```
+
 then use it in anywhere in your app
+
 ```javascript
 //other file
 import route from './api-routes';

@@ -39,8 +39,8 @@ function () {
       var prefix = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
       var newName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
       var retObj = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+      var slashRegex = /(^\/|\/$)/gi; //for every route in this object
 
-      //for every route in this object
       for (var _i = 0, _Object$entries = Object.entries(routes); _i < _Object$entries.length; _i++) {
         var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
             prop = _Object$entries$_i[0],
@@ -53,10 +53,11 @@ function () {
           //if this route has a name attribute then concatenate it to the upper level name
           if (route.name) {
             _newName = (newName === "" ? "" : newName + ".") + route.name;
-          } //continue recursively searching for the matching route name in the nested routes
+          }
 
+          var newPrefix = route.prefix.replace(slashRegex, ""); //continue recursively searching for the matching route name in the nested routes
 
-          this._initRoutePatterns(route.routes, args, prefix + (route.prefix === "" ? "" : "/" + route.prefix), _newName, retObj); //if this object has no nested routes we need to return the url with the provided arguments
+          this._initRoutePatterns(route.routes, args, prefix + (newPrefix === "" ? "" : "/" + newPrefix), _newName, retObj); //if this object has no nested routes we need to return the url with the provided arguments
 
         } else {
           //if our route has a name attribute then use it otherwise use the property name
@@ -71,9 +72,14 @@ function () {
             pathPostfix = route;
           }
 
+          pathPostfix = pathPostfix.replace(slashRegex, "");
           _newName = (newName === "" ? "" : newName + ".") + namePostfix; //if the newName we constructed matches the name provided by the user
 
-          retObj[_newName] = new _urlPattern["default"](prefix + (pathPostfix === "" ? "" : "/" + pathPostfix));
+          try {
+            retObj[_newName] = new _urlPattern["default"](prefix + (pathPostfix === "" ? "" : "/" + pathPostfix));
+          } catch (ex) {
+            throw new Error('could not parse url: "' + pathPostfix + '"');
+          }
         }
       }
 
@@ -84,7 +90,7 @@ function () {
     value: function get(name) {
       var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       if (this.patterns[name]) return this.patterns[name].stringify(args);
-      return undefined;
+      throw new Error('name: "' + name + '" was not defined in routes');
     }
   }]);
 
