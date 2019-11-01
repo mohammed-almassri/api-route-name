@@ -1,5 +1,5 @@
 import UrlPattern from "url-pattern";
-
+import qs from "qs";
 export default class ApiRouteName {
   constructor(routes) {
     this.patterns = this._initRoutePatterns(routes);
@@ -42,6 +42,8 @@ export default class ApiRouteName {
           namePostfix = route.name;
           pathPostfix = route.endpoint;
         } else {
+          console.log(prop, route);
+
           namePostfix = prop;
           pathPostfix = route;
         }
@@ -59,8 +61,12 @@ export default class ApiRouteName {
     }
     return retObj;
   }
-  get(name, args = {}) {
-    if (this.patterns[name]) return this.patterns[name].stringify(args);
+  get(name, args = {}, params = null) {
+    let url = this.patterns[name].stringify(args);
+    if (params) {
+      url += "?" + qs.stringify(params);
+    }
+    if (this.patterns[name]) return url;
     throw new Error('name: "' + name + '" was not defined in routes');
   }
 }

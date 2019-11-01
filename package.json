@@ -16,6 +16,7 @@
     "author": "mohammed almassri",
     "license": "MIT",
     "dependencies": {
+        "qs": "^6.9.0",
         "url-pattern": "^1.0.3"
     },
     "devDependencies": {

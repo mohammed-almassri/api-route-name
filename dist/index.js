@@ -7,6 +7,8 @@ exports["default"] = void 0;
 
 var _urlPattern = _interopRequireDefault(require("url-pattern"));
 
+var _qs = _interopRequireDefault(require("qs"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
@@ -68,6 +70,7 @@ function () {
             namePostfix = route.name;
             pathPostfix = route.endpoint;
           } else {
+            console.log(prop, route);
             namePostfix = prop;
             pathPostfix = route;
           }
@@ -89,7 +92,14 @@ function () {
     key: "get",
     value: function get(name) {
       var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      if (this.patterns[name]) return this.patterns[name].stringify(args);
+      var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      var url = this.patterns[name].stringify(args);
+
+      if (params) {
+        url += "?" + _qs["default"].stringify(params);
+      }
+
+      if (this.patterns[name]) return url;
       throw new Error('name: "' + name + '" was not defined in routes');
     }
   }]);

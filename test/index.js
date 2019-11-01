@@ -35,6 +35,13 @@ const routes = [
         routes: {
           posts: ":id/posts"
         }
+      },
+      {
+        prefix: "search",
+        name: "search",
+        routes: {
+          search: ""
+        }
       }
     ]
   }
@@ -69,5 +76,15 @@ describe("Router", () => {
     assert.equal(router.get("accounts.signup"), "/api/v1/signup");
     assert.equal(router.get("accounts.login"), "/api/v1/login");
     assert.equal(router.get("accounts.logout"), "/api/v1/logout");
+  });
+  it("should add query parameters", () => {
+    assert.equal(
+      router.get(
+        "search.search",
+        {},
+        { query: "john", type: ["name", "email"] }
+      ),
+      "/api/v1/search?query=john&type%5B0%5D=name&type%5B1%5D=email"
+    );
   });
 });
