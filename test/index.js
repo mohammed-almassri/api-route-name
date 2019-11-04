@@ -7,41 +7,33 @@ const routes = [
       {
         prefix: "",
         name: "accounts",
-        routes: {
-          signup: "/signup",
-          login: "login/",
-          logout: "/logout/"
-        }
+        routes: [
+          { name: "signup", prefix: "/signup" },
+          { name: "login", prefix: "login/" },
+          { name: "logout", prefix: "/logout/" }
+        ]
       },
       {
         prefix: "posts",
         name: "posts",
-        routes: {
-          index: "/",
-          create: "create",
-          like: ":id/like",
-          share: ":id/share",
-          retrieve: {
-            name: "get",
-            endpoint: ":id"
-          },
-          update: ":id",
-          delete: ":id"
-        }
+        routes: [
+          { name: "index", prefix: "/" },
+          { name: "create", prefix: "create" },
+          { name: "like", prefix: ":id/like" },
+          { name: "share", prefix: ":id/share" },
+          { name: "update", prefix: ":id" },
+          { name: "delete", prefix: ":id" }
+        ]
       },
       {
         prefix: "users",
         name: "users",
-        routes: {
-          posts: ":id/posts"
-        }
+        routes: [{ name: "posts", prefix: ":id/posts" }]
       },
       {
         prefix: "search",
         name: "search",
-        routes: {
-          search: ""
-        }
+        routes: [{ name: "search", prefix: "" }]
       }
     ]
   }
@@ -58,9 +50,6 @@ describe("Router", () => {
   });
   it("should add the arguments to their correct place in the url", () => {
     assert.equal(router.get("posts.update", { id: 1 }), "/api/v1/posts/1");
-  });
-  it("should return the specified name when a name attribute is specified", () => {
-    assert.equal(router.get("posts.get", { id: 1 }), "/api/v1/posts/1");
   });
   it("should correctly evaluate the names of different routes with the same endpoint", () => {
     assert.equal(router.get("posts.update", { id: 1 }), "/api/v1/posts/1");

@@ -11,19 +11,13 @@ var _qs = _interopRequireDefault(require("qs"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var slashRegex = /(^\/|\/$)/gi;
 
 var ApiRouteName =
 /*#__PURE__*/
@@ -37,62 +31,37 @@ function () {
   _createClass(ApiRouteName, [{
     key: "_initRoutePatterns",
     value: function _initRoutePatterns(routes) {
+      var _this = this;
+
       var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var prefix = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
-      var newName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
-      var retObj = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
-      var slashRegex = /(^\/|\/$)/gi; //for every route in this object
+      var subRoutePrefix = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
+      var subRouteName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
+      var snowBall = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+      routes.forEach(function (_ref) {
+        var prefix = _ref.prefix,
+            name = _ref.name,
+            routes = _ref.routes;
+        var newRouteName = subRouteName ? "".concat(subRouteName, ".") : "";
+        if (name) newRouteName += name;
 
-      for (var _i = 0, _Object$entries = Object.entries(routes); _i < _Object$entries.length; _i++) {
-        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-            prop = _Object$entries$_i[0],
-            route = _Object$entries$_i[1];
+        if (routes) {
+          var slashlessPrefix = prefix.replace(slashRegex, "");
+          var newRoutePrefix = "".concat(subRoutePrefix).concat(slashlessPrefix ? "/".concat(slashlessPrefix) : '');
 
-        //continue building the name of this route
-        var _newName = newName; //if this route has more nested routes
-
-        if (route.routes) {
-          //if this route has a name attribute then concatenate it to the upper level name
-          if (route.name) {
-            _newName = (newName === "" ? "" : newName + ".") + route.name;
-          }
-
-          var newPrefix = route.prefix.replace(slashRegex, ""); //continue recursively searching for the matching route name in the nested routes
-
-          this._initRoutePatterns(route.routes, args, prefix + (newPrefix === "" ? "" : "/" + newPrefix), _newName, retObj); //if this object has no nested routes we need to return the url with the provided arguments
-
+          _this._initRoutePatterns(routes, args, newRoutePrefix, newRouteName, snowBall);
         } else {
-          //if our route has a name attribute then use it otherwise use the property name
-          var namePostfix = void 0,
-              pathPostfix = void 0;
-
-          if (route.name) {
-            namePostfix = route.name;
-            pathPostfix = route.endpoint;
-          } else {
-            console.log(prop, route);
-            namePostfix = prop;
-            pathPostfix = route;
-          }
-
-          pathPostfix = pathPostfix.replace(slashRegex, "");
-          _newName = (newName === "" ? "" : newName + ".") + namePostfix; //if the newName we constructed matches the name provided by the user
-
-          try {
-            retObj[_newName] = new _urlPattern["default"](prefix + (pathPostfix === "" ? "" : "/" + pathPostfix));
-          } catch (ex) {
-            throw new Error('could not parse url: "' + pathPostfix + '"');
-          }
+          var slashlessFullRoute = prefix.replace(slashRegex, "");
+          var newRoute = "".concat(subRoutePrefix).concat(slashlessFullRoute ? "/".concat(slashlessFullRoute) : "");
+          snowBall[newRouteName] = new _urlPattern["default"](newRoute);
         }
-      }
-
-      return retObj;
+      });
+      return snowBall;
     }
   }, {
     key: "get",
     value: function get(name) {
       var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var params = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      var params = arguments.length > 2 ? arguments[2] : undefined;
       var url = this.patterns[name].stringify(args);
 
       if (params) {
