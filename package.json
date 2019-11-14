@@ -34,8 +34,8 @@
         "pre-commit": "^1.2.2"
     },
     "pre-commit": [
-      "precommit-msg",
-      "lint",
-      "postcommit-msg"
+        "precommit-msg",
+        "lint",
+        "postcommit-msg"
     ]
 }
