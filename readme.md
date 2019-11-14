@@ -17,14 +17,25 @@ give names to your api endpoints and easily get their url.
 declare an array of routes as so:
 
 ```javascript
-const routes = [{
-    prefix: "/api/v1",
+const routes = [
+  {
+    prefix: '/api/v1',
     routes: [
-        signup: "signup",
-        login: "login",
-        user: 'user/:id'
-    ]
-}]
+      {
+        name: 'auth',
+        prefix: 'auth',
+        resources: { signup: 'signup', login: 'login', user: 'user/:id' },
+      },
+      {
+        name: 'users',
+        prefix: 'users',
+        resources: {
+          get: ':id',
+        },
+      },
+    ],
+  },
+];
 ```
 
 import the class:
@@ -42,19 +53,21 @@ initialize an `ApiRouteName` object with the route array you declared.
 get your urls with the `get` method
 
 ```javascript
-const signup = route.get("signup");
+const signup = route.get('auth.signup');
 //signup = "/api/v1/signup"
-const user = route.get("user", { id: 10 });
+const user = route.get('user', { id: 10 });
 //user =  "/api/v1/user/10"
 ```
 
 ## Urls and Names
 
-the `prefix` attribute specifies a prefix for all the routes in the `routes` array.
+the `prefix` attribute specifies a prefix for all the routes in the `routes` array and it's children.
+
 any object with a `prefix` should have a `name` attribute but it's not required.
 
 every `routes` can have a nested `routes`, in that case it should have a `prefix` and a `name`.
-if it does not have nested routes the route names will be taken from the attribute names and the path to the endpoints from the attribute values.
+
+to specify the bottom-level routes you need to declare a `resources` object inside one of the objects in a `routes` array
 
 a route in a route object like
 
@@ -68,7 +81,7 @@ a route in a route object like
         routes: [{
             prefix: "prefix3",
             name: "name3"
-            routes: {
+            resources: {
                 routeName: "routeURL"
             }
         }]
@@ -76,10 +89,9 @@ a route in a route object like
 }]
 ```
 
-will have the name `name1.name2.name3.routeName` and an endpoint of `prefix1/prefix2/prefix3/routeURL`
+will have the name `name1.name2.name3.routeName` and a path of `prefix1/prefix2/prefix3/routeURL`
 
-the name is taken from the attribute name. you can specify a name explicitly but then you also have to specify an endpoint.
-`routeName:{name:"routeName2",endpoint:"endpoint2"}`
+the name of the resource is taken from the attribute name.
 
 ## Arguments
 
@@ -97,7 +109,7 @@ userPosts:"users/:id/posts"
 then to retrieve the posts for user with id 21 you pass an object with attributes matching your arguments.
 
 ```javascript
-const posts = route.get("userPost", { id: 21 });
+const posts = route.get('userPost', { id: 21 });
 //posts =  "{prefix you specified}/user/21/posts"
 ```
 
@@ -112,12 +124,12 @@ from calling `routeNames` with your `routes` object and exporting that function 
 
 ```javascript
 //filename: api-routes.js
-import ApiRouteName from "api-route-name";
+import ApiRouteName from 'api-route-name';
 
 const routes = [
   {
     //specify your routes here
-  }
+  },
 ];
 
 export default new ApiRouteName(routes);
