@@ -29,7 +29,7 @@
         "@babel/preset-env": "^7.4.5",
         "chai": "^4.2.0",
         "eslint": "^6.6.0",
-        "mocha": "^6.1.4",
+        "mocha": "^10.2.0",
         "nodemod": "^1.5.19",
         "pre-commit": "^1.2.2"
     },
